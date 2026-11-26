@@ -409,10 +409,96 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
   .scrim.show{display:block}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.print-meta,.print-only{display:none}
+
+/* ==========================================================================
+   Print
+   ========================================================================== */
+@page{
+  size:A4;margin:16mm 15mm 18mm;
+  @bottom-left{content:"The 100/100 Handbook — CWV";font:8pt -apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#6e6e73}
+  @bottom-right{content:"Page " counter(page) " of " counter(pages);font:8pt -apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#6e6e73}
+}
+@page :first{
+  @bottom-left{content:none}
+}
 @media print{
-  .toolbar,.sidebar,.skip,.progress .btn{display:none}
-  .content{margin:0;padding:0}
-  section.doc{break-inside:avoid-page}
+  html{scroll-padding-top:0}
+  body{font-size:10pt;line-height:1.45;color:#000;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  *{box-shadow:none!important;text-shadow:none!important;transition:none!important}
+
+  /* Screen-only chrome */
+  .toolbar,.sidebar,.scrim,.rail-tip,.skip,.segmented,.progress,.screen-only,svg[width="0"]{display:none!important}
+  .print-only{display:inline}
+  .content,.sb-collapsed .content{margin:0!important;padding:0!important}
+  .page{max-width:none}
+
+  /* Typography */
+  h1{font-size:24pt;margin-bottom:8pt}
+  .lede{font-size:12pt;color:#333}
+  h2{font-size:17pt}
+  h3{font-size:12.5pt;margin:16pt 0 6pt}
+  h4{font-size:10.5pt}
+  .sec-sub{font-size:10.5pt;color:#333;margin-bottom:12pt}
+  p,li{orphans:3;widows:3}
+  h1,h2,h3,h4,.sec-head,.code-title,caption{break-after:avoid;page-break-after:avoid}
+  :not(pre)>code{background:#f2f2f4;color:#000}
+
+  /* Cover / hero */
+  .hero{padding:0 0 14pt;margin-bottom:6pt}
+  .print-meta{display:block;font-size:8.5pt;color:#555;margin:12pt 0 0}
+  .rings{margin-top:14pt;gap:18pt}
+  .ring svg{width:52pt;height:52pt}
+
+  /* Sections: never start a heading at the bottom of a page */
+  section.doc{padding:18pt 0 4pt;break-inside:auto}
+  .sec-head .ico.lg{width:22pt;height:22pt;border-radius:6pt}
+  .sec-head .ico.lg svg{width:13pt;height:13pt}
+  #budgets,#checklist{break-before:page}
+
+  /* Keep small blocks whole */
+  .card,.row,.callout,.gotchas>li,.steps li,details.disclose,.do,.dont,.legend,.wbar,.progress,
+  fieldset.check,.check-box label,tr,img,svg{break-inside:avoid;page-break-inside:avoid}
+
+  /* Surfaces: borders instead of shadows */
+  .card,.gotchas>li,details.disclose{border:.75pt solid #d2d2d7}
+  .group,.check-box,.progress{border:.75pt solid #e0e0e4}
+  .cards{grid-template-columns:repeat(2,1fr);gap:8pt}
+  .card{padding:10pt}
+  .two-col{gap:8pt}
+
+  /* Disclosures print expanded (opened by JS on beforeprint) */
+  details.disclose>summary::before{display:none}
+  .disclose-body{padding:0 12pt 10pt 12pt;color:#222}
+
+  /* Tables */
+  .table-wrap{overflow:visible!important;border:.75pt solid #d2d2d7;border-radius:6pt}
+  table{font-size:9pt}
+  thead{display:table-header-group}
+  th,td{padding:5pt 8pt}
+  caption{padding:6pt 8pt}
+  [role="tabpanel"][hidden]{display:block!important}
+  [role="tabpanel"]::before{display:block;font-weight:600;font-size:10.5pt;margin:8pt 0 4pt}
+  #panel-m::before{content:"Mobile"}
+  #panel-d::before{content:"Desktop"}
+
+  /* Code */
+  pre{white-space:pre-wrap;word-break:break-word;overflow:visible!important;font-size:7.8pt;line-height:1.45;
+      padding:8pt 10pt;border:.75pt solid #e0e0e4;break-inside:auto}
+
+  /* Links: show destination for external URLs */
+  a{color:#000;text-decoration:underline;text-decoration-color:#999}
+  .side-list a,.logo{text-decoration:none}
+  .content a[href^="http"]::after{content:" (" attr(href) ")";font-size:8pt;color:#555;word-break:break-all}
+
+  /* Checklist prints as a paper checklist */
+  .check-box input{box-shadow:none!important;border:1pt solid #555;width:11pt;height:11pt;border-radius:2.5pt}
+  .check-box input:checked{background:#007aff;border-color:#007aff}
+  .check-box label{padding:5pt 10pt;font-size:9.5pt}
+  .check-box label+label::before{left:10pt}
+  .progress{padding:8pt 10pt}
+
+  .footer{margin-top:20pt}
 }
 </style>
 </head>
@@ -498,6 +584,7 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
 <header class="hero">
   <p class="eyebrow">Field guide</p>
   <h1>Building a WordPress site that scores 100 / 100 / 100 / 100</h1>
+  <p class="print-meta" id="printMeta">https://gitussr.github.io/core-web-vitals/</p>
   <p class="lede">How PageSpeed Insights actually awards its points, the criteria nobody tells you about, and the decisions you must make from the very first line of HTML — long before the site becomes a WordPress theme.</p>
   <div class="rings" role="list" aria-label="Target scores">
     <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,sans-serif">100</text></svg><b>Performance</b></div>
@@ -1204,7 +1291,7 @@ add_image_size( <span class="s">'hero-1200'</span>, 1200, 675, <span class="k">t
 <!-- ======================================================================= -->
 <section class="doc" id="checklist" aria-labelledby="h-check">
   <div class="sec-head"><span class="ico lg" style="--c:var(--green-fill)"><svg aria-hidden="true"><use href="#i-list"/></svg></span><h2 id="h-check">Launch checklist</h2></div>
-  <p class="sec-sub">Tick items as you go — progress is saved in this browser.</p>
+  <p class="sec-sub"><span class="screen-only">Tick items as you go — progress is saved in this browser.</span><span class="print-only">Tick each item off with a pen as you complete it.</span></p>
 
   <div class="progress">
     <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
@@ -1392,6 +1479,16 @@ add_image_size( <span class="s">'hero-1200'</span>, 1200, 675, <span class="k">t
   update();
 
   d.getElementById('printBtn').addEventListener('click',function(){window.print()});
+
+  /* Print: expand every disclosure, stamp the date, then restore */
+  var closedDetails=[];
+  addEventListener('beforeprint',function(){
+    closedDetails=[].filter.call(d.querySelectorAll('details'),function(x){return !x.open});
+    closedDetails.forEach(function(x){x.open=true});
+    var m=d.getElementById('printMeta');
+    m.textContent=location.href.split('#')[0]+' · printed '+new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  });
+  addEventListener('afterprint',function(){closedDetails.forEach(function(x){x.open=false});closedDetails=[]});
 })();
 </script>
 </body>
