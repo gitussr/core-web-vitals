@@ -104,7 +104,15 @@ strong{font-weight:600}
 }
 .tb-btn:hover{background:var(--fill-2)}
 .tb-btn svg{width:18px;height:18px}
-.sidebar-toggle{display:none}
+.sidebar-toggle{display:inline-flex}
+.sidebar-toggle[aria-expanded="true"]{color:var(--label)}
+/* Desktop: collapsible sidebar (state restored before first paint) */
+@media (min-width:861px){
+  .sb-anim .sidebar{transition:transform .25s ease,visibility .25s}
+  .sb-anim .content{transition:margin-left .25s ease}
+  .sb-collapsed .sidebar{transform:translateX(-100%);visibility:hidden}
+  .sb-collapsed .content{margin-left:0}
+}
 .badge-100{
   display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:13px;
   background:var(--green-tint);color:var(--green);font-size:12px;font-weight:600;white-space:nowrap
@@ -321,7 +329,6 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
 }
 @media (max-width:860px){
   .logo{width:auto;padding-right:6px;margin-right:2px;border-right:1px solid var(--separator);border-radius:0}
-  .sidebar-toggle{display:inline-flex}
   .sidebar{transform:translateX(-100%);transition:transform .22s ease;box-shadow:none;visibility:hidden}
   .sidebar.open{transform:none;box-shadow:8px 0 30px rgba(0,0,0,.12);visibility:visible}
   .content{margin-left:0}
@@ -395,6 +402,7 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
 </style>
 </head>
 <body>
+<script>try{if(localStorage.getItem("wv100-sidebar")==="closed")document.documentElement.classList.add("sb-collapsed")}catch(e){}</script>
 <a class="skip" href="#main">Skip to content</a>
 
 <!-- SVG symbol library (decorative icons) -->
@@ -428,8 +436,8 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
     <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="cwvG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34c759"/><stop offset="1" stop-color="#0a84ff"/></linearGradient></defs><rect width="32" height="32" rx="7.5" fill="url(#cwvG)"/><g fill="none" stroke="#fff" stroke-width="3"><path d="M7 19A9 9 0 0 1 10.84 11.63" stroke-opacity=".6"/><path d="M12.2 10.84A9 9 0 0 1 19.8 10.84" stroke-opacity=".82"/><path d="M21.16 11.63A9 9 0 0 1 25 19"/></g><path d="M16 19L20.5 13.64" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="16" cy="19" r="2.3" fill="#fff"/><text x="16" y="28.2" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="6.4" font-weight="800" letter-spacing=".4" fill="#fff">CWV</text></svg>
     <span class="logo-word"><b>CWV</b><small>Core Web Vitals</small></span>
   </a>
-  <button class="tb-btn sidebar-toggle" id="sidebarToggle" type="button" aria-controls="sidebar" aria-expanded="false">
-    <svg aria-hidden="true"><use href="#i-sidebar"/></svg><span class="sr-only">Show sections</span>
+  <button class="tb-btn sidebar-toggle" id="sidebarToggle" type="button" aria-controls="sidebar" aria-expanded="true" title="Hide sidebar">
+    <svg aria-hidden="true"><use href="#i-sidebar"/></svg><span class="sr-only" id="sbLabel">Sidebar</span>
   </button>
   <div class="toolbar-title">The 100/100 Handbook<small>WordPress · Lighthouse · PageSpeed</small></div>
   <div class="toolbar-spacer"></div>
@@ -1270,10 +1278,29 @@ add_image_size( <span class="s">'hero-1200'</span>, 1200, 675, <span class="k">t
   /* Sidebar toggle for narrow windows */
   var sb=d.getElementById('sidebar'),tg=d.getElementById('sidebarToggle');
   var scrim=d.getElementById('scrim');
-  function setSb(open){sb.classList.toggle('open',open);scrim.classList.toggle('show',open);tg.setAttribute('aria-expanded',open)}
-  tg.addEventListener('click',function(){setSb(!sb.classList.contains('open'))});
+  var root=d.documentElement,narrow=matchMedia('(max-width:860px)');
+  function sbVisible(){return narrow.matches?sb.classList.contains('open'):!root.classList.contains('sb-collapsed')}
+  function syncTg(){var v=sbVisible();tg.setAttribute('aria-expanded',v);tg.title=v?'Hide sidebar':'Show sidebar'}
+  /* Narrow windows: overlay drawer */
+  function setSb(open){sb.classList.toggle('open',open);scrim.classList.toggle('show',open);syncTg()}
+  /* Wide windows: collapse / expand, remembered between visits */
+  function setCollapsed(c){
+    root.classList.toggle('sb-collapsed',c);
+    try{localStorage.setItem('wv100-sidebar',c?'closed':'open')}catch(e){}
+    syncTg();
+  }
+  tg.addEventListener('click',function(){
+    if(narrow.matches)setSb(!sb.classList.contains('open'));
+    else setCollapsed(!root.classList.contains('sb-collapsed'));
+  });
   scrim.addEventListener('click',function(){setSb(false)});
-  matchMedia('(max-width:860px)').addEventListener('change',function(m){if(!m.matches)setSb(false)});
+  narrow.addEventListener('change',function(){setSb(false)});
+  /* macOS shortcut for Show/Hide Sidebar: Control-Command-S */
+  d.addEventListener('keydown',function(e){
+    if(e.ctrlKey&&e.metaKey&&(e.key==='s'||e.key==='S')){e.preventDefault();tg.click()}
+  });
+  syncTg();
+  requestAnimationFrame(function(){requestAnimationFrame(function(){root.classList.add('sb-anim')})});
 
   /* Tables: add per-cell labels so they can stack as cards on phones */
   d.querySelectorAll('.table-wrap').forEach(function(w){
