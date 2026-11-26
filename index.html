@@ -3,8 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The 100/100 Handbook — Building a Perfect-Score WordPress Site</title>
-<meta name="description" content="A field guide to scoring 100 in Performance, Accessibility, Best Practices and SEO on PageSpeed Insights: how Lighthouse scores, the hidden criteria, and what to do from the first HTML line to the finished WordPress theme.">
+<title>WordPress Core Web Vitals: Score 100 on PageSpeed Insights</title>
+<meta name="description" content="Learn how PageSpeed Insights scores Performance, Accessibility, Best Practices and SEO, the hidden criteria, and how to build a WordPress site that scores 100.">
+<link rel="canonical" href="https://gitussr.github.io/core-web-vitals/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="CWV — Core Web Vitals">
+<meta property="og:title" content="WordPress Core Web Vitals: Score 100 on PageSpeed Insights">
+<meta property="og:description" content="How Lighthouse scores all four categories, the hidden criteria that cost points, and a step-by-step plan from HTML to a 100-scoring WordPress theme.">
+<meta property="og:url" content="https://gitussr.github.io/core-web-vitals/">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"WordPress Core Web Vitals: How to Score 100 on PageSpeed Insights","description":"How PageSpeed Insights scores Performance, Accessibility, Best Practices and SEO, the hidden criteria, and how to build a WordPress site that scores 100.","url":"https://gitussr.github.io/core-web-vitals/","inLanguage":"en","dateModified":"2026-11-26","about":["Core Web Vitals","WordPress","Lighthouse","PageSpeed Insights"],"proficiencyLevel":"Intermediate"}</script>
 <meta name="theme-color" content="#f6f6f6">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='cwvG' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2334c759'/%3E%3Cstop offset='1' stop-color='%230a84ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7.5' fill='url(%23cwvG)'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='3'%3E%3Cpath d='M7 19A9 9 0 0 1 10.84 11.63' stroke-opacity='.6'/%3E%3Cpath d='M12.2 10.84A9 9 0 0 1 19.8 10.84' stroke-opacity='.82'/%3E%3Cpath d='M21.16 11.63A9 9 0 0 1 25 19'/%3E%3C/g%3E%3Cpath d='M16 19L20.5 13.64' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='19' r='2.3' fill='%23fff'/%3E%3Ctext x='16' y='28.2' text-anchor='middle' font-family='-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif' font-size='6.4' font-weight='800' letter-spacing='.4' fill='%23fff'%3ECWV%3C/text%3E%3C/svg%3E">
 <style>
@@ -175,8 +183,33 @@ h1{font-family:var(--font-display);font-size:40px;line-height:1.1;letter-spacing
 
 .rings{display:flex;flex-wrap:wrap;gap:28px;margin:30px 0 4px}
 .ring{display:flex;flex-direction:column;align-items:center;gap:8px;width:92px;text-align:center}
-.ring svg{width:76px;height:76px}
 .ring b{font-size:13px;font-weight:600;line-height:1.25}
+/* Lighthouse-style gauges — pure CSS: arc draws, number counts 0→100,
+   colour moves red (<50) → orange (<90) → green. Final state is the default,
+   so no-JS, print and reduced-motion all show 100. */
+@property --n{syntax:"<integer>";inherits:true;initial-value:100}
+.gauge{position:relative;display:block;width:76px;height:76px}
+.gauge svg{width:100%;height:100%;overflow:visible}
+.ring-bg{fill:#e8f8eb;stroke:rgba(0,0,0,.06);stroke-width:6}
+.ring-arc{fill:none;stroke:#28cd41;stroke-width:6;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:0}
+.ring-num{position:absolute;inset:0;display:grid;place-items:center;font-size:22px;font-weight:700;color:#1f7a35;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em;counter-reset:n var(--n)}
+.ring-num::after{content:counter(n)}
+@media (prefers-reduced-motion:no-preference){
+  .ring{--d:calc(var(--i,0) * 180ms + 250ms)}
+  .ring:nth-child(2){--i:1}.ring:nth-child(3){--i:2}.ring:nth-child(4){--i:3}
+  .ring-num{animation:g-count 1.6s linear var(--d) both,g-text 1.6s linear var(--d) both}
+  .ring-arc{animation:g-arc 1.6s linear var(--d) both,g-stroke 1.6s linear var(--d) both}
+  .ring-bg{animation:g-fill 1.6s linear var(--d) both}
+  .gauge{animation:g-pop .5s cubic-bezier(.2,.8,.3,1.5) calc(var(--d) + 1.6s) both}
+}
+/* Keyframes approximate an ease-out curve so value, arc and colour stay in sync */
+@keyframes g-count{0%{--n:0}15%{--n:39}30%{--n:66}45%{--n:83}60%{--n:93}80%{--n:99}100%{--n:100}}
+@keyframes g-arc{0%{stroke-dashoffset:100}15%{stroke-dashoffset:61}30%{stroke-dashoffset:34}45%{stroke-dashoffset:17}60%{stroke-dashoffset:7}80%{stroke-dashoffset:1}100%{stroke-dashoffset:0}}
+@keyframes g-stroke{0%,20%{stroke:#ff3b30}22%,54%{stroke:#ff9500}56%,100%{stroke:#28cd41}}
+@keyframes g-text{0%,20%{color:#c4001a}22%,54%{color:#a04800}56%,100%{color:#1f7a35}}
+@keyframes g-fill{0%,20%{fill:#ffe9e7}22%,54%{fill:#fff1dd}56%,100%{fill:#e8f8eb}}
+@keyframes g-pop{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
 
 section.doc{padding:44px 0 8px;border-bottom:1px solid var(--separator)}
 section.doc:last-of-type{border-bottom:0}
@@ -366,7 +399,8 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
   .toolbar-title small{display:none}
   .rings{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
   .ring{width:auto}
-  .ring svg{width:60px;height:60px}
+  .gauge{width:60px;height:60px}
+  .ring-num{font-size:18px}
   .ring b{font-size:12px}
   .row{flex-wrap:wrap;padding:12px 14px}
   .row-meta{width:100%;padding-left:0}
@@ -448,7 +482,9 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
   .hero{padding:0 0 14pt;margin-bottom:6pt}
   .print-meta{display:block;font-size:8.5pt;color:#555;margin:12pt 0 0}
   .rings{margin-top:14pt;gap:18pt}
-  .ring svg{width:52pt;height:52pt}
+  .gauge{width:52pt;height:52pt}
+  .gauge,.ring-num,.ring-arc,.ring-bg{animation:none!important}
+  .ring-num{font-size:15pt}
 
   /* Sections: never start a heading at the bottom of a page */
   section.doc{padding:18pt 0 4pt;break-inside:auto}
@@ -582,15 +618,15 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
 
 <!-- ======================================================================= -->
 <header class="hero">
-  <p class="eyebrow">Field guide</p>
-  <h1>Building a WordPress site that scores 100 / 100 / 100 / 100</h1>
+  <p class="eyebrow">WordPress Core Web Vitals guide</p>
+  <h1>How to score 100 on PageSpeed Insights with WordPress</h1>
   <p class="print-meta" id="printMeta">https://gitussr.github.io/core-web-vitals/</p>
-  <p class="lede">How PageSpeed Insights actually awards its points, the criteria nobody tells you about, and the decisions you must make from the very first line of HTML — long before the site becomes a WordPress theme.</p>
+  <p class="lede">A complete Core Web Vitals and Lighthouse guide: how PageSpeed Insights awards its points in Performance, Accessibility, Best Practices and SEO, the hidden criteria nobody tells you about, and the decisions to make from the first line of HTML — long before the site becomes a WordPress theme.</p>
   <div class="rings" role="list" aria-label="Target scores">
-    <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,sans-serif">100</text></svg><b>Performance</b></div>
-    <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,sans-serif">100</text></svg><b>Accessibility</b></div>
-    <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,sans-serif">100</text></svg><b>Best Practices</b></div>
-    <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,sans-serif">100</text></svg><b>SEO</b></div>
+    <div class="ring" role="listitem"><span class="gauge" aria-hidden="true"><svg viewBox="0 0 80 80"><circle class="ring-bg" cx="40" cy="40" r="34"/><circle class="ring-arc" cx="40" cy="40" r="34" pathLength="100" transform="rotate(-90 40 40)"/></svg><span class="ring-num"></span></span><b>Performance<span class="sr-only">: 100</span></b></div>
+    <div class="ring" role="listitem"><span class="gauge" aria-hidden="true"><svg viewBox="0 0 80 80"><circle class="ring-bg" cx="40" cy="40" r="34"/><circle class="ring-arc" cx="40" cy="40" r="34" pathLength="100" transform="rotate(-90 40 40)"/></svg><span class="ring-num"></span></span><b>Accessibility<span class="sr-only">: 100</span></b></div>
+    <div class="ring" role="listitem"><span class="gauge" aria-hidden="true"><svg viewBox="0 0 80 80"><circle class="ring-bg" cx="40" cy="40" r="34"/><circle class="ring-arc" cx="40" cy="40" r="34" pathLength="100" transform="rotate(-90 40 40)"/></svg><span class="ring-num"></span></span><b>Best Practices<span class="sr-only">: 100</span></b></div>
+    <div class="ring" role="listitem"><span class="gauge" aria-hidden="true"><svg viewBox="0 0 80 80"><circle class="ring-bg" cx="40" cy="40" r="34"/><circle class="ring-arc" cx="40" cy="40" r="34" pathLength="100" transform="rotate(-90 40 40)"/></svg><span class="ring-num"></span></span><b>SEO<span class="sr-only">: 100</span></b></div>
   </div>
 </header>
 
