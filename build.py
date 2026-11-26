@@ -80,6 +80,8 @@ PAGES = [
      "Build it right"),
 ]
 
+AUTHOR = {"@type": "Person", "name": "Chiranjit Karmakar", "url": "https://www.chiranjitkarmakar.com/"}
+
 HOME_TITLE = "WordPress Core Web Vitals: Score 100 on PageSpeed Insights"
 HOME_DESC = ("Learn how PageSpeed Insights scores Performance, Accessibility, Best Practices "
              "and SEO, the hidden criteria, and how to build a WordPress site that scores 100.")
@@ -268,7 +270,8 @@ def page(prefix, current, title, desc, url, main_html, extra_js="", ld=None, hea
 <main class="content" id="main" tabindex="-1">
 <div class="page">
 {main_html}
-<footer class="footer"><p>{footer_p}</p></footer>
+<footer class="footer"><p>{footer_p}</p>
+<p class="credit">&copy; 2027 All Rights Reserved. Developed by Chiranjit Karmakar (website: <a href="https://www.chiranjitkarmakar.com/">chiranjitkarmakar.com</a>)</p></footer>
 </div>
 </main>
 
@@ -294,7 +297,7 @@ def pager(prefix, idx):
 def article_ld(title, desc, url, crumbs):
     return {"@context": "https://schema.org", "@graph": [
         {"@type": "TechArticle", "headline": title, "description": desc, "url": url, "inLanguage": "en",
-         "dateModified": MODIFIED, "isPartOf": {"@type": "WebSite", "name": "CWV — Core Web Vitals", "url": SITE},
+         "dateModified": MODIFIED, "author": AUTHOR, "isPartOf": {"@type": "WebSite", "name": "CWV — Core Web Vitals", "url": SITE},
          "about": ["Core Web Vitals", "WordPress", "Lighthouse", "PageSpeed Insights"]},
         {"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(crumbs)]},
@@ -323,6 +326,7 @@ home_main = f"{home_hero}\n\n{overview}\n\n" + "\n".join(toc) + "\n" + pager("",
 home_ld = {"@context": "https://schema.org", "@graph": [
     {"@type": "WebSite", "name": "CWV — Core Web Vitals", "url": SITE, "inLanguage": "en"},
     {"@type": "TechArticle", "headline": HOME_H1, "description": HOME_DESC, "url": SITE, "inLanguage": "en",
+     "author": AUTHOR,
      "dateModified": MODIFIED, "about": ["Core Web Vitals", "WordPress", "Lighthouse", "PageSpeed Insights"],
      "hasPart": [{"@type": "TechArticle", "headline": p[2], "url": SITE + p[1] + "/"} for p in PAGES]},
 ]}
