@@ -14,6 +14,9 @@
 <meta name="twitter:card" content="summary">
 <meta name="theme-color" content="#f6f6f6">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='cwvG' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2334c759'/%3E%3Cstop offset='1' stop-color='%230a84ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7.5' fill='url(%23cwvG)'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='3'%3E%3Cpath d='M7 19A9 9 0 0 1 10.84 11.63' stroke-opacity='.6'/%3E%3Cpath d='M12.2 10.84A9 9 0 0 1 19.8 10.84' stroke-opacity='.82'/%3E%3Cpath d='M21.16 11.63A9 9 0 0 1 25 19'/%3E%3C/g%3E%3Cpath d='M16 19L20.5 13.64' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='19' r='2.3' fill='%23fff'/%3E%3Ctext x='16' y='28.2' text-anchor='middle' font-family='-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif' font-size='6.4' font-weight='800' letter-spacing='.4' fill='%23fff'%3ECWV%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="CWV">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"CSS Performance: Critical CSS, Fonts and Zero CLS","description":"Critical CSS, reserved space, compositor-only animations and metric-matched font fallbacks: CSS rules for fast LCP and zero layout shift.","url":"https://gitussr.github.io/core-web-vitals/css-performance/","inLanguage":"en","dateModified":"2026-11-26","author":{"@type":"Person","name":"Chiranjit Karmakar","url":"https://www.chiranjitkarmakar.com/"},"isPartOf":{"@type":"WebSite","name":"CWV — Core Web Vitals","url":"https://gitussr.github.io/core-web-vitals/"},"about":["Core Web Vitals","WordPress","Lighthouse","PageSpeed Insights"]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Handbook","item":"https://gitussr.github.io/core-web-vitals/"},{"@type":"ListItem","position":2,"name":"2 · CSS","item":"https://gitussr.github.io/core-web-vitals/css-performance/"}]}]}</script>
 <style>
 /* ==========================================================================
@@ -81,6 +84,8 @@ body{
 img,svg{display:block;max-width:100%}
 a{color:var(--blue);text-decoration:none}
 a:hover{text-decoration:underline}
+/* Links inside running text must not rely on colour alone (WCAG 1.4.1) */
+main p a,main li a:not([class]){text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
 :focus-visible{outline:none;box-shadow:var(--focus);border-radius:4px}
 code,kbd{font-family:var(--mono);font-size:.86em}
 :not(pre)>code{background:var(--fill);padding:.1em .38em;border-radius:5px;color:#3a3a3c;word-break:break-word}
@@ -113,6 +118,7 @@ strong{font-weight:600}
 }
 .tb-btn:hover{background:var(--fill-2)}
 .tb-btn svg{width:18px;height:18px}
+.tb-btn[hidden]{display:none}
 .sidebar-toggle{display:inline-flex}
 .sidebar-toggle[aria-expanded="true"]{color:var(--label)}
 /* Desktop: sidebar collapses to an icon rail (state restored before first paint) */
@@ -503,7 +509,7 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
   h3,.t-h3{font-size:12.5pt;margin:16pt 0 6pt}
   h4,.t-h4{font-size:10.5pt}
   .page-title{font-size:20pt}
-  .pager,.crumbs,.toc-hint{display:none!important}
+  .pager,.crumbs,.toc-hint,#installBtn{display:none!important}
   .toc a{border:.75pt solid #d2d2d7}
   .sec-sub{font-size:10.5pt;color:#333;margin-bottom:12pt}
   p,li{orphans:3;widows:3}
@@ -594,6 +600,7 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
     <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M7.5 12.5l3 3 6-6.5" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M8.5 8.5l7 7m0-7l-7 7" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></symbol>
     <symbol id="i-sidebar" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 4.5v15" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 8.5h2M5.5 11h2M5.5 13.5h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-install" viewBox="0 0 24 24"><path d="M12 3v11m0 0-4-4m4 4 4-4M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V3h10v6M7 17H4v-7a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v7h-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><rect x="7" y="14" width="10" height="7" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
   </defs>
 </svg>
@@ -609,6 +616,7 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
   <div class="toolbar-title">The 100/100 Handbook<small>WordPress · Lighthouse · PageSpeed</small></div>
   <div class="toolbar-spacer"></div>
   <span class="badge-100"><i aria-hidden="true"></i>Lighthouse 12–13 · Nov 2026</span>
+  <button class="tb-btn" type="button" id="installBtn" aria-label="Install app" hidden><svg aria-hidden="true"><use href="#i-install"/></svg><span>Install</span></button>
   <button class="tb-btn" type="button" id="printBtn" aria-label="Print"><svg aria-hidden="true"><use href="#i-print"/></svg><span>Print</span></button>
 </header>
 
@@ -729,6 +737,16 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
     if(m)m.textContent=location.href.split('#')[0]+' · printed '+new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
   });
   addEventListener('afterprint',function(){closed.forEach(function(x){x.open=false});closed=[]});
+})();
+
+(function(){
+  if('serviceWorker' in navigator){
+    addEventListener('load',function(){navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(function(){})});
+  }
+  var btn=document.getElementById('installBtn'),ev=null;
+  addEventListener('beforeinstallprompt',function(e){e.preventDefault();ev=e;btn.hidden=false});
+  btn.addEventListener('click',function(){if(!ev)return;ev.prompt();ev.userChoice.then(function(){ev=null;btn.hidden=true})});
+  addEventListener('appinstalled',function(){btn.hidden=true});
 })();
 </script>
 </body>
