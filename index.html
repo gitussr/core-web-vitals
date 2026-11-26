@@ -11,9 +11,21 @@
 /* ==========================================================================
    macOS HIG-inspired design tokens (light appearance only)
    ========================================================================== */
+/* Inter (SIL OFL 1.1) — variable wght + opsz, subset to Latin. Used where SF Pro isn't installed. */
+@font-face{
+  font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;
+  src:url("fonts/InterVariable-latin.woff2") format("woff2");
+  unicode-range:U+0020-007E,U+00A0-00FF,U+0152-0153,U+2013-2014,U+2018-201E,U+2022,U+2026,U+2032-2033,U+2039-203A,U+20AC,U+2122,U+2192,U+2212,U+2248,U+2264-2265;
+}
+/* Arial tuned to Inter's metrics so the swap doesn't shift layout (CLS) */
+@font-face{
+  font-family:"Inter Fallback";src:local("Arial"),local("ArialMT"),local("Liberation Sans");
+  size-adjust:107.12%;ascent-override:90.44%;descent-override:22.52%;line-gap-override:0%;
+}
 :root{
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
-  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
+  /* Apple devices use the built-in SF Pro; everything else gets Inter */
+  --font: -apple-system, BlinkMacSystemFont, "Inter", "Inter Fallback", system-ui, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "Inter", "Inter Fallback", system-ui, sans-serif;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
   /* Label colors — tuned so every text colour passes WCAG AA (4.5:1) */
@@ -197,7 +209,7 @@ p{margin:0 0 14px}
 /* Tables */
 .table-wrap{overflow-x:auto;margin:0 0 20px;border-radius:var(--radius-m);box-shadow:inset 0 0 0 1px var(--separator)}
 table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
-caption{text-align:left;font-size:12px;color:var(--label-3);padding:0 0 6px;caption-side:top}
+caption{text-align:left;font-size:12px;line-height:1.45;color:var(--label-3);padding:10px 14px 9px;caption-side:top}
 th,td{text-align:left;padding:9px 14px;vertical-align:top}
 thead th{font-size:12px;font-weight:600;color:var(--label-2);background:var(--toolbar);border-bottom:1px solid var(--separator);white-space:nowrap}
 tbody tr:nth-child(even){background:#f7f7f9}
@@ -360,7 +372,7 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
   .table-wrap.stack{box-shadow:none;border-radius:0;overflow:visible}
   .stack table,.stack tbody,.stack tr,.stack th,.stack td{display:block;width:100%}
   .stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
-  .stack caption{display:block;padding-bottom:10px}
+  .stack caption{display:block;padding:0 2px 10px}
   .stack tbody tr{background:var(--grouped)!important;border-radius:var(--radius-m);margin:0 0 10px;padding:6px 0}
   .stack tbody th{font-size:15px;padding:8px 14px 4px}
   .stack td{display:flex;gap:12px;justify-content:space-between;padding:6px 14px;text-align:right;white-space:normal}
@@ -424,7 +436,7 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
 
 <header class="toolbar">
   <a class="logo" href="./">
-    <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="cwvG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34c759"/><stop offset="1" stop-color="#0a84ff"/></linearGradient></defs><rect width="32" height="32" rx="7.5" fill="url(#cwvG)"/><g fill="none" stroke="#fff" stroke-width="3"><path d="M7 19A9 9 0 0 1 10.84 11.63" stroke-opacity=".6"/><path d="M12.2 10.84A9 9 0 0 1 19.8 10.84" stroke-opacity=".82"/><path d="M21.16 11.63A9 9 0 0 1 25 19"/></g><path d="M16 19L20.5 13.64" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="16" cy="19" r="2.3" fill="#fff"/><text x="16" y="28.2" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="6.4" font-weight="800" letter-spacing=".4" fill="#fff">CWV</text></svg>
+    <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="cwvG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34c759"/><stop offset="1" stop-color="#0a84ff"/></linearGradient></defs><rect width="32" height="32" rx="7.5" fill="url(#cwvG)"/><g fill="none" stroke="#fff" stroke-width="3"><path d="M7 19A9 9 0 0 1 10.84 11.63" stroke-opacity=".6"/><path d="M12.2 10.84A9 9 0 0 1 19.8 10.84" stroke-opacity=".82"/><path d="M21.16 11.63A9 9 0 0 1 25 19"/></g><path d="M16 19L20.5 13.64" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="16" cy="19" r="2.3" fill="#fff"/><text x="16" y="28.2" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Inter,Helvetica,Arial,sans-serif" font-size="6.4" font-weight="800" letter-spacing=".4" fill="#fff">CWV</text></svg>
     <span class="logo-word"><b>CWV</b><small>Core Web Vitals</small></span>
   </a>
   <button class="tb-btn sidebar-toggle" id="sidebarToggle" type="button" aria-controls="sidebar" aria-expanded="false">
@@ -475,10 +487,10 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
   <h1>Building a WordPress site that scores 100 / 100 / 100 / 100</h1>
   <p class="lede">How PageSpeed Insights actually awards its points, the criteria nobody tells you about, and the decisions you must make from the very first line of HTML — long before the site becomes a WordPress theme.</p>
   <div class="rings" role="list" aria-label="Target scores">
-    <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,sans-serif">100</text></svg><b>Performance</b></div>
-    <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,sans-serif">100</text></svg><b>Accessibility</b></div>
-    <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,sans-serif">100</text></svg><b>Best Practices</b></div>
-    <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,sans-serif">100</text></svg><b>SEO</b></div>
+    <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,Inter,sans-serif">100</text></svg><b>Performance</b></div>
+    <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,Inter,sans-serif">100</text></svg><b>Accessibility</b></div>
+    <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,Inter,sans-serif">100</text></svg><b>Best Practices</b></div>
+    <div class="ring" role="listitem"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#e8f8eb" stroke="#28cd41" stroke-width="6"/><text x="40" y="47" text-anchor="middle" font-size="22" font-weight="700" fill="#1f7a35" font-family="-apple-system,BlinkMacSystemFont,Inter,sans-serif">100</text></svg><b>SEO</b></div>
   </div>
 </header>
 
@@ -1242,7 +1254,7 @@ add_image_size( <span class="s">'hero-1200'</span>, 1200, 675, <span class="k">t
     <div><p><strong>This page practises what it preaches.</strong> It’s a single HTML file with inline CSS and less than 2 KB of deferred-at-the-end JavaScript, system fonts, inline SVG icons, no third parties and AA-contrast colours throughout.</p></div>
   </div>
 
-  <p class="footer">Scoring details reflect Lighthouse 12–13 as used by PageSpeed Insights in late 2026. Google adjusts weights, curves and audits between major versions — check the Lighthouse scoring documentation and changelog when a new major version ships. The “≈ 0.99” values are calculated from the published log-normal control points.</p>
+  <p class="footer">Typeface: SF Pro on Apple devices; <a href="https://rsms.me/inter/">Inter</a> by Rasmus Andersson elsewhere (SIL Open Font License 1.1). Scoring details reflect Lighthouse 12–13 as used by PageSpeed Insights in late 2026. Google adjusts weights, curves and audits between major versions — check the Lighthouse scoring documentation and changelog when a new major version ships. The “≈ 0.99” values are calculated from the published log-normal control points.</p>
 </section>
 
 </div>
