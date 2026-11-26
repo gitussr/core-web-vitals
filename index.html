@@ -6,7 +6,7 @@
 <title>The 100/100 Handbook — Building a Perfect-Score WordPress Site</title>
 <meta name="description" content="A field guide to scoring 100 in Performance, Accessibility, Best Practices and SEO on PageSpeed Insights: how Lighthouse scores, the hidden criteria, and what to do from the first HTML line to the finished WordPress theme.">
 <meta name="theme-color" content="#f6f6f6">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23248A3D'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' stroke='%23fff' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='cwvG' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2334c759'/%3E%3Cstop offset='1' stop-color='%230a84ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7.5' fill='url(%23cwvG)'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='3'%3E%3Cpath d='M7 19A9 9 0 0 1 10.84 11.63' stroke-opacity='.6'/%3E%3Cpath d='M12.2 10.84A9 9 0 0 1 19.8 10.84' stroke-opacity='.82'/%3E%3Cpath d='M21.16 11.63A9 9 0 0 1 25 19'/%3E%3C/g%3E%3Cpath d='M16 19L20.5 13.64' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='19' r='2.3' fill='%23fff'/%3E%3Ctext x='16' y='28.2' text-anchor='middle' font-family='-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif' font-size='6.4' font-weight='800' letter-spacing='.4' fill='%23fff'%3ECWV%3C/text%3E%3C/svg%3E">
 <style>
 /* ==========================================================================
    macOS HIG-inspired design tokens (light appearance only)
@@ -88,11 +88,12 @@ strong{font-weight:600}
   display:flex;align-items:center;gap:14px;padding:0 16px;
   background:var(--toolbar);border-bottom:1px solid var(--separator);
 }
-.lights{display:flex;gap:8px;width:calc(var(--sidebar-w) - 32px);flex-shrink:0}
-.lights span{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.18)}
-.lights span:nth-child(1){background:#ff5f57}
-.lights span:nth-child(2){background:#febc2e}
-.lights span:nth-child(3){background:#28c840}
+.logo{display:flex;align-items:center;gap:9px;width:calc(var(--sidebar-w) - 32px);flex-shrink:0;color:var(--label);border-radius:8px}
+.logo:hover{text-decoration:none}
+.logo-mark{width:32px;height:32px;flex-shrink:0;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.18))}
+.logo-word{display:flex;flex-direction:column;line-height:1.05}
+.logo-word b{font-family:var(--font-display);font-size:17px;font-weight:800;letter-spacing:.04em}
+.logo-word small{font-size:10.5px;font-weight:500;color:var(--label-2);letter-spacing:.01em;margin-top:2px}
 .toolbar-title{font-size:13px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .toolbar-title small{display:block;font-weight:400;font-size:11px;color:var(--label-3);letter-spacing:0}
 .toolbar-spacer{flex:1}
@@ -318,7 +319,7 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
   .content{padding:calc(var(--toolbar-h) + 28px) 28px 80px}
 }
 @media (max-width:860px){
-  .lights{width:auto}
+  .logo{width:auto;padding-right:6px;margin-right:2px;border-right:1px solid var(--separator);border-radius:0}
   .sidebar-toggle{display:inline-flex}
   .sidebar{transform:translateX(-100%);transition:transform .22s ease;box-shadow:none;visibility:hidden}
   .sidebar.open{transform:none;box-shadow:8px 0 30px rgba(0,0,0,.12);visibility:visible}
@@ -326,18 +327,63 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
   .badge-100{display:none}
 }
 @media (max-width:620px){
-  body{font-size:15px}
-  .content{padding:calc(var(--toolbar-h) + 22px) 18px 64px}
-  h1{font-size:31px}
+  body{font-size:16px}
+  .toolbar{padding:0 max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left));gap:8px}
+  .tb-btn span{display:none}
+  .content{padding:calc(var(--toolbar-h) + 22px) 16px 64px}
+  h1{font-size:30px}
   .lede{font-size:17px}
-  h2{font-size:24px}
+  h2{font-size:23px}
+  h3{font-size:18px}
+  .sec-head{gap:12px}
+  .sec-head .ico.lg{width:32px;height:32px}
+  .sec-sub{font-size:15.5px}
   .two-col{grid-template-columns:1fr}
-  .lights{display:none}
-  .rings{gap:14px}
-  .ring{width:76px}
-  .ring svg{width:64px;height:64px}
-  .row{flex-wrap:wrap}
-  .row-meta{width:100%;padding-left:34px}
+  .logo-word small{display:none}
+  .toolbar-title small{display:none}
+  .rings{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .ring{width:auto}
+  .ring svg{width:60px;height:60px}
+  .ring b{font-size:12px}
+  .row{flex-wrap:wrap;padding:12px 14px}
+  .row-meta{width:100%;padding-left:0}
+  .row>.ico~.row-meta{padding-left:34px}
+  .disclose-body{padding:0 14px 14px 16px}
+  .gotchas>li{padding:14px}
+  pre{font-size:12px;padding:12px;margin-left:-4px;margin-right:-4px}
+  .progress{flex-wrap:wrap}
+  .progress-track{flex-basis:100%}
+  .progress output{text-align:left;flex:1}
+  .legend{grid-template-columns:1fr 1fr}
+
+  /* Tables become stacked cards on phones (labels added by JS) */
+  .table-wrap.stack{box-shadow:none;border-radius:0;overflow:visible}
+  .stack table,.stack tbody,.stack tr,.stack th,.stack td{display:block;width:100%}
+  .stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  .stack caption{display:block;padding-bottom:10px}
+  .stack tbody tr{background:var(--grouped)!important;border-radius:var(--radius-m);margin:0 0 10px;padding:6px 0}
+  .stack tbody th{font-size:15px;padding:8px 14px 4px}
+  .stack td{display:flex;gap:12px;justify-content:space-between;padding:6px 14px;text-align:right;white-space:normal}
+  .stack td+td{border-top:1px solid var(--separator)}
+  .stack td::before{content:attr(data-label);font-size:12.5px;font-weight:600;color:var(--label-2);text-align:left;flex-shrink:0;max-width:45%}
+  .stack td.num{text-align:right}
+  .stack.wide td{display:block;text-align:left}
+  .stack.wide td::before{display:block;max-width:none;margin-bottom:2px}
+}
+/* Comfortable touch targets on touch screens (HIG: 44 pt) */
+@media (pointer:coarse){
+  .tb-btn{min-height:44px;min-width:44px}
+  .side-list a{min-height:44px;font-size:15px}
+  .segmented button{min-height:36px;padding:6px 20px}
+  .btn{min-height:36px;padding:6px 16px}
+  details.disclose>summary{min-height:48px}
+  .check-box label{padding:12px 16px}
+}
+.scrim{display:none}
+@media (max-width:860px){
+  .sidebar{width:min(var(--sidebar-w),86vw)}
+  .scrim{position:fixed;inset:var(--toolbar-h) 0 0 0;z-index:15;background:rgba(0,0,0,.25);border:0;padding:0}
+  .scrim.show{display:block}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{
@@ -377,11 +423,14 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
 </svg>
 
 <header class="toolbar">
-  <div class="lights" aria-hidden="true"><span></span><span></span><span></span></div>
+  <a class="logo" href="./">
+    <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="cwvG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34c759"/><stop offset="1" stop-color="#0a84ff"/></linearGradient></defs><rect width="32" height="32" rx="7.5" fill="url(#cwvG)"/><g fill="none" stroke="#fff" stroke-width="3"><path d="M7 19A9 9 0 0 1 10.84 11.63" stroke-opacity=".6"/><path d="M12.2 10.84A9 9 0 0 1 19.8 10.84" stroke-opacity=".82"/><path d="M21.16 11.63A9 9 0 0 1 25 19"/></g><path d="M16 19L20.5 13.64" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="16" cy="19" r="2.3" fill="#fff"/><text x="16" y="28.2" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="6.4" font-weight="800" letter-spacing=".4" fill="#fff">CWV</text></svg>
+    <span class="logo-word"><b>CWV</b><small>Core Web Vitals</small></span>
+  </a>
   <button class="tb-btn sidebar-toggle" id="sidebarToggle" type="button" aria-controls="sidebar" aria-expanded="false">
     <svg aria-hidden="true"><use href="#i-sidebar"/></svg><span class="sr-only">Show sections</span>
   </button>
-  <div class="toolbar-title">The 100/100 Handbook<small>WordPress · Core Web Vitals · Lighthouse</small></div>
+  <div class="toolbar-title">The 100/100 Handbook<small>WordPress · Lighthouse · PageSpeed</small></div>
   <div class="toolbar-spacer"></div>
   <span class="badge-100"><i aria-hidden="true"></i>Lighthouse 12–13 · Nov 2026</span>
   <button class="tb-btn" type="button" id="printBtn"><svg aria-hidden="true"><use href="#i-print"/></svg><span>Print</span></button>
@@ -415,6 +464,7 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
     </ul>
   </div>
 </nav>
+<div class="scrim" id="scrim" aria-hidden="true"></div>
 
 <main class="content" id="main" tabindex="-1">
 <div class="page">
@@ -1218,8 +1268,30 @@ add_image_size( <span class="s">'hero-1200'</span>, 1200, 675, <span class="k">t
 
   /* Sidebar toggle for narrow windows */
   var sb=d.getElementById('sidebar'),tg=d.getElementById('sidebarToggle');
-  function setSb(open){sb.classList.toggle('open',open);tg.setAttribute('aria-expanded',open)}
+  var scrim=d.getElementById('scrim');
+  function setSb(open){sb.classList.toggle('open',open);scrim.classList.toggle('show',open);tg.setAttribute('aria-expanded',open)}
   tg.addEventListener('click',function(){setSb(!sb.classList.contains('open'))});
+  scrim.addEventListener('click',function(){setSb(false)});
+  matchMedia('(max-width:860px)').addEventListener('change',function(m){if(!m.matches)setSb(false)});
+
+  /* Tables: add per-cell labels so they can stack as cards on phones */
+  d.querySelectorAll('.table-wrap').forEach(function(w){
+    var heads=[].map.call(w.querySelectorAll('thead th'),function(th){return th.textContent.trim()});
+    var long=false;
+    w.querySelectorAll('tbody tr').forEach(function(tr){
+      [].forEach.call(tr.children,function(c,i){
+        if(c.tagName==='TD'){c.setAttribute('data-label',heads[i]||'');if(c.textContent.length>34)long=true}
+      });
+    });
+    w.classList.add('stack');if(long)w.classList.add('wide');
+  });
+
+  /* Horizontally scrollable code blocks must be keyboard-reachable */
+  var scrollers=[].slice.call(d.querySelectorAll('pre,.table-wrap'));
+  function markScroll(){scrollers.forEach(function(p){
+    if(p.scrollWidth>p.clientWidth+1)p.tabIndex=0;else p.removeAttribute('tabindex');
+  })}
+  markScroll();addEventListener('resize',markScroll,{passive:true});
   sb.addEventListener('click',function(e){if(e.target.closest('a')&&matchMedia('(max-width:860px)').matches)setSb(false)});
   d.addEventListener('keydown',function(e){if(e.key==='Escape'&&sb.classList.contains('open')){setSb(false);tg.focus()}});
 
