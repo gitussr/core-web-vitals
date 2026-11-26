@@ -67,7 +67,6 @@ Official reference: [Understanding Core Web Vitals and Google search results](ht
 ├── sw.js                  # Generated: offline service worker
 ├── icons/                 # App icons (any, maskable, Apple touch)
 ├── _config.yml            # Keeps build files out of GitHub Pages
-├── LICENSE
 └── README.md
 ```
 
@@ -133,6 +132,10 @@ Scoring details reflect Lighthouse 12–13 as used by PageSpeed Insights in late
 weights, curves and audits between major versions. This project is not affiliated with Google,
 Apple or WordPress.
 
-## License
+## Copyright
 
-[MIT](LICENSE) © 2026 gitussr
+© 2026 Chiranjit Karmakar. All rights reserved.
+
+The content, design and code of this handbook may not be copied, modified, republished or
+redistributed without prior written permission. Developed by
+[Chiranjit Karmakar](https://www.chiranjitkarmakar.com/).
