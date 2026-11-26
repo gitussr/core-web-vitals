@@ -271,7 +271,7 @@ def page(prefix, current, title, desc, url, main_html, extra_js="", ld=None, hea
 <div class="page">
 {main_html}
 <footer class="footer"><p>{footer_p}</p>
-<p class="credit">&copy; 2027 All Rights Reserved. Developed by Chiranjit Karmakar (website: <a href="https://www.chiranjitkarmakar.com/">chiranjitkarmakar.com</a>)</p></footer>
+<p class="credit">&copy; 2027 All Rights Reserved. Developed by <a href="https://www.chiranjitkarmakar.com/">Chiranjit Karmakar</a></p></footer>
 </div>
 </main>
 
