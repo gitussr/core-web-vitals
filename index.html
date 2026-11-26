@@ -60,6 +60,7 @@
   --focus: 0 0 0 3px rgba(0,122,255,.45);
   --toolbar-h: 52px;
   --sidebar-w: 268px;
+  --rail-w: 60px;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -106,13 +107,27 @@ strong{font-weight:600}
 .tb-btn svg{width:18px;height:18px}
 .sidebar-toggle{display:inline-flex}
 .sidebar-toggle[aria-expanded="true"]{color:var(--label)}
-/* Desktop: collapsible sidebar (state restored before first paint) */
+/* Desktop: sidebar collapses to an icon rail (state restored before first paint) */
 @media (min-width:861px){
-  .sb-anim .sidebar{transition:transform .25s ease,visibility .25s}
-  .sb-anim .content{transition:margin-left .25s ease}
-  .sb-collapsed .sidebar{transform:translateX(-100%);visibility:hidden}
-  .sb-collapsed .content{margin-left:0}
+  .sb-anim .sidebar{transition:width .22s ease}
+  .sb-anim .content{transition:margin-left .22s ease}
+  .sb-collapsed .sidebar{width:var(--rail-w);padding-left:8px;padding-right:8px;overflow-x:hidden}
+  .sb-collapsed .content{margin-left:var(--rail-w)}
+  .sb-collapsed .side-group{margin:0}
+  .sb-collapsed .side-group+.side-group{border-top:1px solid var(--separator);margin-top:8px;padding-top:8px}
+  .sb-collapsed .side-head{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+  .sb-collapsed .side-list a{justify-content:center;padding:0;width:40px;min-height:36px;margin:0 auto 2px}
+  .sb-collapsed .side-list .ico{width:24px;height:24px;border-radius:6px}
+  .sb-collapsed .side-list .ico svg{width:15px;height:15px}
+  .sb-collapsed .side-text{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 }
+/* macOS-style tooltip for rail icons */
+.rail-tip{
+  position:fixed;z-index:50;pointer-events:none;background:#fff;color:var(--label);font-size:12px;line-height:1.3;
+  padding:4px 8px;border-radius:6px;box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 14px rgba(0,0,0,.12);
+  white-space:nowrap;opacity:0;transform:translateY(-50%);transition:opacity .12s ease
+}
+.rail-tip.show{opacity:1}
 .badge-100{
   display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:13px;
   background:var(--green-tint);color:var(--green);font-size:12px;font-weight:600;white-space:nowrap
@@ -449,31 +464,32 @@ fieldset.check legend{font-size:13px;font-weight:600;color:var(--label-2);paddin
   <div class="side-group">
     <p class="side-head">Understand the score</p>
     <ul class="side-list">
-      <li><a href="#overview"><span class="ico" style="--c:var(--gray-fill)"><svg aria-hidden="true"><use href="#i-chart"/></svg></span>What “100” really means</a></li>
-      <li><a href="#performance"><span class="ico" style="--c:var(--orange-fill)"><svg aria-hidden="true"><use href="#i-gauge"/></svg></span>Performance scoring</a></li>
-      <li><a href="#cwv"><span class="ico" style="--c:var(--pink-fill)"><svg aria-hidden="true"><use href="#i-person"/></svg></span>Core Web Vitals (field)</a></li>
-      <li><a href="#accessibility"><span class="ico" style="--c:var(--blue-fill)"><svg aria-hidden="true"><use href="#i-person"/></svg></span>Accessibility scoring</a></li>
-      <li><a href="#best-practices"><span class="ico" style="--c:var(--green-fill)"><svg aria-hidden="true"><use href="#i-shield"/></svg></span>Best Practices scoring</a></li>
-      <li><a href="#seo"><span class="ico" style="--c:var(--indigo-fill)"><svg aria-hidden="true"><use href="#i-search"/></svg></span>SEO scoring</a></li>
-      <li><a href="#hidden"><span class="ico" style="--c:var(--red-fill)"><svg aria-hidden="true"><use href="#i-eye"/></svg></span>Hidden criteria</a></li>
+      <li><a href="#overview"><span class="ico" style="--c:var(--gray-fill)"><svg aria-hidden="true"><use href="#i-chart"/></svg></span><span class="side-text">What “100” really means</span></a></li>
+      <li><a href="#performance"><span class="ico" style="--c:var(--orange-fill)"><svg aria-hidden="true"><use href="#i-gauge"/></svg></span><span class="side-text">Performance scoring</span></a></li>
+      <li><a href="#cwv"><span class="ico" style="--c:var(--pink-fill)"><svg aria-hidden="true"><use href="#i-person"/></svg></span><span class="side-text">Core Web Vitals (field)</span></a></li>
+      <li><a href="#accessibility"><span class="ico" style="--c:var(--blue-fill)"><svg aria-hidden="true"><use href="#i-person"/></svg></span><span class="side-text">Accessibility scoring</span></a></li>
+      <li><a href="#best-practices"><span class="ico" style="--c:var(--green-fill)"><svg aria-hidden="true"><use href="#i-shield"/></svg></span><span class="side-text">Best Practices scoring</span></a></li>
+      <li><a href="#seo"><span class="ico" style="--c:var(--indigo-fill)"><svg aria-hidden="true"><use href="#i-search"/></svg></span><span class="side-text">SEO scoring</span></a></li>
+      <li><a href="#hidden"><span class="ico" style="--c:var(--red-fill)"><svg aria-hidden="true"><use href="#i-eye"/></svg></span><span class="side-text">Hidden criteria</span></a></li>
     </ul>
   </div>
   <div class="side-group">
     <p class="side-head">Build it right</p>
     <ul class="side-list">
-      <li><a href="#budgets"><span class="ico" style="--c:var(--teal-fill)"><svg aria-hidden="true"><use href="#i-chart"/></svg></span>0 · Plan &amp; budgets</a></li>
-      <li><a href="#html"><span class="ico" style="--c:var(--orange-fill)"><svg aria-hidden="true"><use href="#i-doc"/></svg></span>1 · HTML foundations</a></li>
-      <li><a href="#css"><span class="ico" style="--c:var(--blue-fill)"><svg aria-hidden="true"><use href="#i-brush"/></svg></span>2 · CSS</a></li>
-      <li><a href="#js"><span class="ico" style="--c:#c9a400"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span>3 · JavaScript</a></li>
-      <li><a href="#media"><span class="ico" style="--c:var(--purple-fill)"><svg aria-hidden="true"><use href="#i-photo"/></svg></span>4 · Images, fonts, media</a></li>
-      <li><a href="#wordpress"><span class="ico" style="--c:#21759b"><svg aria-hidden="true"><use href="#i-w"/></svg></span>5 · Converting to WordPress</a></li>
-      <li><a href="#hosting"><span class="ico" style="--c:var(--gray-fill)"><svg aria-hidden="true"><use href="#i-server"/></svg></span>6 · Hosting &amp; server</a></li>
-      <li><a href="#testing"><span class="ico" style="--c:var(--pink-fill)"><svg aria-hidden="true"><use href="#i-flask"/></svg></span>7 · Testing &amp; monitoring</a></li>
-      <li><a href="#checklist"><span class="ico" style="--c:var(--green-fill)"><svg aria-hidden="true"><use href="#i-list"/></svg></span>Launch checklist</a></li>
+      <li><a href="#budgets"><span class="ico" style="--c:var(--teal-fill)"><svg aria-hidden="true"><use href="#i-chart"/></svg></span><span class="side-text">0 · Plan &amp; budgets</span></a></li>
+      <li><a href="#html"><span class="ico" style="--c:var(--orange-fill)"><svg aria-hidden="true"><use href="#i-doc"/></svg></span><span class="side-text">1 · HTML foundations</span></a></li>
+      <li><a href="#css"><span class="ico" style="--c:var(--blue-fill)"><svg aria-hidden="true"><use href="#i-brush"/></svg></span><span class="side-text">2 · CSS</span></a></li>
+      <li><a href="#js"><span class="ico" style="--c:#c9a400"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span><span class="side-text">3 · JavaScript</span></a></li>
+      <li><a href="#media"><span class="ico" style="--c:var(--purple-fill)"><svg aria-hidden="true"><use href="#i-photo"/></svg></span><span class="side-text">4 · Images, fonts, media</span></a></li>
+      <li><a href="#wordpress"><span class="ico" style="--c:#21759b"><svg aria-hidden="true"><use href="#i-w"/></svg></span><span class="side-text">5 · Converting to WordPress</span></a></li>
+      <li><a href="#hosting"><span class="ico" style="--c:var(--gray-fill)"><svg aria-hidden="true"><use href="#i-server"/></svg></span><span class="side-text">6 · Hosting &amp; server</span></a></li>
+      <li><a href="#testing"><span class="ico" style="--c:var(--pink-fill)"><svg aria-hidden="true"><use href="#i-flask"/></svg></span><span class="side-text">7 · Testing &amp; monitoring</span></a></li>
+      <li><a href="#checklist"><span class="ico" style="--c:var(--green-fill)"><svg aria-hidden="true"><use href="#i-list"/></svg></span><span class="side-text">Launch checklist</span></a></li>
     </ul>
   </div>
 </nav>
 <div class="scrim" id="scrim" aria-hidden="true"></div>
+<div class="rail-tip" id="railTip" aria-hidden="true"></div>
 
 <main class="content" id="main" tabindex="-1">
 <div class="page">
@@ -1280,7 +1296,7 @@ add_image_size( <span class="s">'hero-1200'</span>, 1200, 675, <span class="k">t
   var scrim=d.getElementById('scrim');
   var root=d.documentElement,narrow=matchMedia('(max-width:860px)');
   function sbVisible(){return narrow.matches?sb.classList.contains('open'):!root.classList.contains('sb-collapsed')}
-  function syncTg(){var v=sbVisible();tg.setAttribute('aria-expanded',v);tg.title=v?'Hide sidebar':'Show sidebar'}
+  function syncTg(){var v=sbVisible();tg.setAttribute('aria-expanded',v);tg.title=narrow.matches?(v?'Hide sidebar':'Show sidebar'):(v?'Collapse sidebar':'Expand sidebar')}
   /* Narrow windows: overlay drawer */
   function setSb(open){sb.classList.toggle('open',open);scrim.classList.toggle('show',open);syncTg()}
   /* Wide windows: collapse / expand, remembered between visits */
@@ -1300,6 +1316,26 @@ add_image_size( <span class="s">'hero-1200'</span>, 1200, 675, <span class="k">t
     if(e.ctrlKey&&e.metaKey&&(e.key==='s'||e.key==='S')){e.preventDefault();tg.click()}
   });
   syncTg();
+
+  /* Tooltips for the icon rail (labels stay in the DOM for screen readers) */
+  var tip=d.getElementById('railTip');
+  function railOn(){return !narrow.matches&&root.classList.contains('sb-collapsed')}
+  function showTip(a){
+    if(!railOn())return;
+    var r=a.getBoundingClientRect();
+    tip.textContent=a.textContent.trim();
+    tip.style.left=(r.right+10)+'px';tip.style.top=(r.top+r.height/2)+'px';
+    tip.classList.add('show');
+  }
+  function hideTip(){tip.classList.remove('show')}
+  links.forEach(function(a){
+    a.addEventListener('mouseenter',function(){showTip(a)});
+    a.addEventListener('focus',function(){showTip(a)});
+    a.addEventListener('mouseleave',hideTip);
+    a.addEventListener('blur',hideTip);
+  });
+  sb.addEventListener('scroll',hideTip,{passive:true});
+  tg.addEventListener('click',hideTip);
   requestAnimationFrame(function(){requestAnimationFrame(function(){root.classList.add('sb-anim')})});
 
   /* Tables: add per-cell labels so they can stack as cards on phones */
